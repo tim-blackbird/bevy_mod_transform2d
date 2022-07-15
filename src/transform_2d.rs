@@ -9,11 +9,11 @@ use bevy::{math::Mat2, prelude::*};
 #[derive(Component, Debug, PartialEq, Clone, Copy, Reflect)]
 #[reflect(Component, PartialEq)]
 pub struct Transform2d {
-    /// The translation along the `X` and `Y` axis.
+    /// The translation along the `X` and `Y` axes.
     pub translation: Vec2,
     /// The rotation in radians. Positive values rotate anti-clockwise.
     pub rotation: f32,
-    /// The scale along the `X` and `Y` axis.
+    /// The scale along the `X` and `Y` axes.
     pub scale: Vec2,
 }
 

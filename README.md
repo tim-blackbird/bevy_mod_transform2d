@@ -1,8 +1,8 @@
 # Bevy Mod Transform2d
-A 2d Transform component for [Bevy](https://github.com/bevyengine/bevy).
-
 [![Crates.io](https://img.shields.io/crates/v/bevy_mod_transform2d.svg)](https://crates.io/crates/bevy_mod_transform2d)
 ![MIT/Apache 2.0](https://img.shields.io/badge/license-MIT%2FApache-blue.svg)
+
+A 2D Transform component for [Bevy](https://github.com/bevyengine/bevy).
 
 ## Usage
 ```toml
@@ -35,6 +35,15 @@ fn setup(mut commands: Commands) {
 }
 ```
 
+Take a look [here](examples) for the examples.
+
+### Version table.
+
+|Bevy  |transform2d|
+|-     |-          |
+| main |bevy_main  |
+| 0.7  |0.1        |
+
 Note that the `Transform2d` component does not replace `Transform` component, instead it writes to it. The `Transform` and `GlobalTransform` components are required for `Transform2d` to function.
 
 To integrate with another library the state of `Transform` and `Transform2d` will need to be synchronised at the right times.
@@ -52,6 +61,7 @@ If there is another library interacts with the transform here's how you would sy
 * When a system writes to `Transfrom` add the provided `sync_from_3d_transform` system *after* it.
 
 ## License
+<span style="font-size: .9em">
 
 Bevy Mod Transform2d is free and open source! All code in this repository is dual-licensed under either:
 
@@ -63,3 +73,5 @@ at your option. This means you can select the license you prefer!
 Unless you explicitly state otherwise, any contribution intentionally submitted
 for inclusion in the work by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any
 additional terms or conditions.
+
+</span>

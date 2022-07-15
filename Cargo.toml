@@ -1,0 +1,14 @@
+[package]
+name = "bevy_mod_transform2d"
+description = "A 2D Transform component for The Bevy game-engine."
+version = "0.1.0"
+edition = "2021"
+
+repository = "http://github.com/devil-ira/bevy_mod_transform2d"
+license = "MIT OR Apache-2.0"
+keywords = ["bevy", "gamedev"]
+categories = ["game-development"]
+
+[dependencies]
+bevy = "0.7"
+bevy_rapier2d = { version = ">=0.14", default-features = false, optional = true }

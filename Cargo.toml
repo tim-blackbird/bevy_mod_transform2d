@@ -11,4 +11,4 @@ categories = ["game-development"]
 
 [dependencies]
 bevy = "0.7"
-bevy_rapier2d = { version = ">=0.14", default-features = false, optional = true }
+bevy_rapier2d = { version = ">= 0.14, < 0.16", default-features = false, optional = true }

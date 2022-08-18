@@ -1,13 +1,13 @@
-use bevy::{math::Mat2, prelude::*};
+use bevy::{math::Mat2, prelude::*, reflect::FromReflect};
 
 /// Describes the position of an [`Entity`] in 2d space.
-/// 
+///
 /// This component acts as a proxy to the [`Transform`] component,
-/// and thus *requires* that both a [`Transform`] and [`GlobalTransform`] are present to function. 
-/// 
+/// and thus *requires* that both a [`Transform`] and [`GlobalTransform`] are present to function.
+///
 /// If this [`Transform2d`] has a parent, then it's relative to the [`Transform2d`] or [`Transform`] of the parent.
-#[derive(Component, Debug, PartialEq, Clone, Copy, Reflect)]
-#[reflect(Component, PartialEq)]
+#[derive(Component, Debug, PartialEq, Clone, Copy, Reflect, FromReflect)]
+#[reflect(Component, PartialEq, Default)]
 pub struct Transform2d {
     /// The translation along the `X` and `Y` axes.
     pub translation: Vec2,
@@ -25,7 +25,7 @@ impl Default for Transform2d {
 
 impl Transform2d {
     /// Creates a new [`Transform2d`] at the position `(x, y)`.
-    /// 
+    ///
     /// Rotation will be `0.` and scale will be `Vec2::ONE`
     #[inline]
     pub fn from_xy(x: f32, y: f32) -> Self {
@@ -33,7 +33,7 @@ impl Transform2d {
     }
 
     /// Creates a new identity [`Transform2d`], with no translation, rotation, and a scale of 1 on all axes.
-    /// 
+    ///
     /// Translation will be `Vec2::ZERO`, rotation will be `0.` and scale will be `Vec2::ONE`
     #[inline]
     pub const fn identity() -> Self {
@@ -45,7 +45,7 @@ impl Transform2d {
     }
 
     /// Creates a new [`Transform2d`] with `translation`.
-    /// 
+    ///
     /// Rotation will be `0.` and scale will be `Vec2::ONE`
     #[inline]
     pub fn from_translation(translation: Vec2) -> Self {
@@ -56,7 +56,7 @@ impl Transform2d {
     }
 
     /// Creates a new [`Transform2d`] with `rotation`.
-    /// 
+    ///
     /// Translation will be `Vec2::ZERO` and scale will be `Vec2::ONE`.
     #[inline]
     pub fn from_rotation(rotation: f32) -> Self {
@@ -67,7 +67,7 @@ impl Transform2d {
     }
 
     /// Creates a new [`Transform2d`] with `scale`.
-    /// 
+    ///
     /// Translation will be `Vec2::ZERO` and rotation will be `0.` .
     #[inline]
     pub fn from_scale(scale: Vec2) -> Self {

@@ -1,6 +1,6 @@
 #![allow(clippy::type_complexity)]
 
-use bevy::{prelude::*, reflect::Reflect, transform::TransformSystem};
+use bevy::{prelude::*, transform::TransformSystem};
 
 #[cfg(feature = "bevy_rapier2d")]
 use bevy_rapier2d::{
@@ -8,36 +8,33 @@ use bevy_rapier2d::{
     plugin::{systems::writeback_rigid_bodies, PhysicsStages},
 };
 
+mod bundle;
 pub mod systems;
 mod transform_2d;
-mod z_index;
+mod z_offset;
 
 #[cfg(feature = "bevy_rapier2d")]
 use systems::sync_from_3d_transform;
 use systems::sync_to_3d_transform;
 use transform_2d::Transform2d;
-use z_index::ZIndex;
+use z_offset::ZOffset;
 
 pub mod prelude {
     pub use crate::{
-        transform_2d::Transform2d, z_index::ZIndex, Transform2dBundle, Transform2dPlugin,
+        bundle::Transform2dBundle, transform_2d::Transform2d, z_offset::ZOffset, Transform2dPlugin,
     };
 }
 
-#[derive(Bundle, Clone, Copy, Debug, Default, Reflect)]
-pub struct Transform2dBundle {
-    pub transform_2d: Transform2d,
-    pub z_index: ZIndex,
-    pub transform: Transform,
-    pub global_transform: GlobalTransform,
-}
-
+/// The [`Plugin`] for [`Transform2d`].
+///
+/// This registers the systems that synchronise [`Transform2d`] with [`Transform`].
+#[derive(Default)]
 pub struct Transform2dPlugin;
 
 impl Plugin for Transform2dPlugin {
     fn build(&self, app: &mut App) {
         app.register_type::<Transform2d>()
-            .register_type::<ZIndex>()
+            .register_type::<ZOffset>()
             // Add transform2d sync system to startup so the first update is "correct"
             .add_startup_system_to_stage(
                 StartupStage::PostStartup,
@@ -51,7 +48,7 @@ impl Plugin for Transform2dPlugin {
         #[cfg(feature = "bevy_rapier2d")]
         {
             // Check if the RapierPhysicsPlugin plugin was added by confirming the Events::<CollisionEvent> resource exists.
-            // Checking for Events::<CollisionEvent> because it is unlikely a user of bevy_rapier would insert that themselfves.
+            // Checking for Events::<CollisionEvent> because it is unlikely a user of bevy_rapier would insert that themselves.
             if app
                 .world
                 .get_resource::<bevy::ecs::event::Events<CollisionEvent>>()

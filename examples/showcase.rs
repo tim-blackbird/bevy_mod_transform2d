@@ -18,7 +18,7 @@ struct Orbit {
 }
 
 #[derive(Component)]
-struct Rotator {
+struct Rotate {
     speed: f32,
 }
 
@@ -33,14 +33,14 @@ fn setup(mut commands: Commands) {
             },
             ..default()
         })
-        .insert_bundle((Transform2d::default(), Rotator { speed: 1. }));
+        .insert_bundle((Transform2d::default(), Rotate { speed: 1. }));
 
     // Spawn a sprite with a 2d transform that orbits the center.
     commands
         .spawn_bundle(SpriteBundle {
             sprite: Sprite {
                 color: Color::DARK_GRAY,
-                custom_size: Some(Vec2::splat(100.)),
+                custom_size: Some(Vec2::splat(150.)),
                 ..default()
             },
             ..default()
@@ -51,23 +51,21 @@ fn setup(mut commands: Commands) {
                 point: Vec2::ZERO,
                 speed: 1.5,
             },
-            Rotator { speed: -1.2 },
+            Rotate { speed: -1.2 },
         ));
 
     // Spawn camera
-    commands.spawn_bundle(OrthographicCameraBundle::new_2d());
+    commands.spawn_bundle(Camera2dBundle::default());
 }
 
 fn orbit(time: Res<Time>, mut query: Query<(&Orbit, &mut Transform2d)>) {
-    let delta = time.delta_seconds();
-    for (orbit, mut transform) in query.iter_mut() {
-        transform.translate_around(orbit.point, orbit.speed * delta);
+    for (orbit, mut transform) in &mut query {
+        transform.translate_around(orbit.point, orbit.speed * time.delta_seconds());
     }
 }
 
-fn rotate(time: Res<Time>, mut query: Query<(&Rotator, &mut Transform2d)>) {
-    let delta = time.delta_seconds();
-    for (rotator, mut transform) in &mut query.iter_mut() {
-        transform.rotation += rotator.speed * delta;
+fn rotate(time: Res<Time>, mut query: Query<(&Rotate, &mut Transform2d)>) {
+    for (rotator, mut transform) in &mut query {
+        transform.rotation += rotator.speed * time.delta_seconds();
     }
 }

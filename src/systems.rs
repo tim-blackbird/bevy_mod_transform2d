@@ -1,52 +1,44 @@
-use bevy::{math::Vec3Swizzles, prelude::*, tasks::ComputeTaskPool};
+use bevy::{math::Vec3Swizzles, prelude::*};
 
-use crate::prelude::{Transform2d, ZIndex};
-
-// TODO: What is a good batch size?
-const BATCH_SIZE: usize = 32;
+use crate::prelude::{Transform2d, ZOffset};
 
 pub fn sync_to_3d_transform(
     mut query: Query<
-        (&Transform2d, Option<&ZIndex>, &mut Transform),
-        Or<(Changed<Transform2d>, Changed<ZIndex>)>,
+        (&Transform2d, Option<&ZOffset>, &mut Transform),
+        Or<(Changed<Transform2d>, Changed<ZOffset>)>,
     >,
-    pool: Res<ComputeTaskPool>,
 ) {
-    query.par_for_each_mut(
-        &pool,
-        BATCH_SIZE,
-        |(transform_2d, z_index, mut transform)| {
-            // Translation
-            let [x, y] = transform_2d.translation.to_array();
-            transform.translation = if let Some(z_index) = z_index {
-                Vec3::new(x, y, z_index.0)
-            } else {
-                Vec3::new(x, y, transform.translation.z)
-            };
+    for (transform_2d, z_offset, mut transform_3d) in &mut query {
+        // Translation
+        transform_3d.translation = if let Some(z_offset) = z_offset {
+            transform_2d.translation.extend(z_offset.0)
+        } else {
+            // Keep the transforms current Z position when the ZOffset component is not present
+            // to avoid needless surprises.
+            transform_2d.translation.extend(transform_3d.translation.z)
+        };
 
-            // Rotation
-            transform.rotation = Quat::from_rotation_z(transform_2d.rotation);
+        // Rotation. Rotations around the axes other than Z are not kept.
+        transform_3d.rotation = Quat::from_rotation_z(transform_2d.rotation);
 
-            // Scale
-            transform.scale = transform_2d.scale.extend(transform.scale.z);
-        },
-    );
+        // Scale. The Z axis is always set to 1 as any other value will affect the Z position of children
+        // which will in turn affect their render order.
+        transform_3d.scale = transform_2d.scale.extend(1.);
+    }
 }
 
-// TODO: Untested.
 pub fn sync_from_3d_transform(
     mut query: Query<(&mut Transform2d, &Transform), Changed<Transform>>,
-    pool: Res<ComputeTaskPool>,
 ) {
-    query.par_for_each_mut(&pool, BATCH_SIZE, |(mut transform_2d, transform)| {
+    for (mut transform_2d, transform_3d) in &mut query {
         // Translation
-        transform_2d.translation = transform.translation.xy();
+        transform_2d.translation = transform_3d.translation.xy();
 
         // Rotation
-        let (_y, _x, z) = transform.rotation.to_euler(EulerRot::YXZ);
+        let (z, _y, _x) = transform_3d.rotation.to_euler(EulerRot::ZYX);
         transform_2d.rotation = z;
 
         // Scale
-        transform_2d.scale = transform.scale.truncate();
-    });
+        transform_2d.scale = transform_3d.scale.truncate();
+    }
 }

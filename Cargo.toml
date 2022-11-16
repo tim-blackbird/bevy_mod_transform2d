@@ -1,7 +1,7 @@
 [package]
 name = "bevy_mod_transform2d"
 description = "A 2D Transform component for The Bevy game-engine."
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 
 repository = "http://github.com/devil-ira/bevy_mod_transform2d"
@@ -10,8 +10,11 @@ keywords = ["bevy", "gamedev"]
 categories = ["game-development"]
 
 [dependencies]
-bevy = "0.8"
-bevy_rapier2d = { version = "0.16", default-features = false, optional = true }
+bevy = "0.9"
+bevy_rapier2d = { version = "0.18", default-features = false, optional = true }
 
 [dev-dependencies]
-bevy_rapier2d = { version = "0.16" }
+bevy_rapier2d = { version = "0.18" }
+
+[patch.crates-io]
+bevy_rapier2d = { git = "https://github.com/devil-ira/bevy_rapier", branch = "bevy-0.9" }

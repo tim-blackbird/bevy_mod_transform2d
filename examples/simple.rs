@@ -13,29 +13,30 @@ fn main() {
 }
 
 fn setup(mut commands: Commands) {
-    commands // Spawn a SpriteBundle that has the Transform and GlobalTransform components.
-        .spawn_bundle(SpriteBundle {
+    // Spawn a SpriteBundle that has the Transform and GlobalTransform components.
+    commands.spawn((
+        SpriteBundle {
             sprite: Sprite {
                 custom_size: Some(Vec2::splat(100.)),
                 ..default()
             },
             ..default()
-        })
-        .insert_bundle(Transform2dBundle::identity());
+        },
+        Transform2d::IDENTITY,
+    ));
 
-    commands
-        .spawn_bundle(SpriteBundle {
+    commands.spawn((
+        SpriteBundle {
             sprite: Sprite {
                 custom_size: Some(Vec2::splat(100.)),
                 color: Color::BLACK,
                 ..default()
             },
             ..default()
-        })
-        .insert_bundle(Transform2dBundle::from_transform(Transform2d::from_xy(
-            50., 0.,
-        )));
+        },
+        Transform2d::from_xy(50., 50.),
+    ));
 
     // Spawn camera
-    commands.spawn_bundle(Camera2dBundle::default());
+    commands.spawn(Camera2dBundle::default());
 }

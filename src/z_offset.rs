@@ -5,7 +5,8 @@ use bevy::{prelude::*, reflect::FromReflect};
 /// This component maps directly to the z translation of the Transform,
 /// and if not present the z translation is left as it was.
 ///
-/// If this [`Transform2d`](crate::Transform2d) has a parent, the offset is relative to the [`Transform2d`] or [`Transform`] of the parent.
+/// If this [`ZOffset`] has a parent, the offset is relative to the [`ZOffset`]
+/// or the Z translation of the [`Transform`] of the parent.
 #[derive(Component, Debug, PartialEq, Clone, Copy, Default, Reflect, FromReflect)]
 #[reflect(Component, PartialEq, Default)]
 pub struct ZOffset(pub f32);

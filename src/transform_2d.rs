@@ -19,7 +19,7 @@ pub struct Transform2d {
 
 impl Default for Transform2d {
     fn default() -> Self {
-        Transform2d::identity()
+        Transform2d::IDENTITY
     }
 }
 
@@ -34,15 +34,12 @@ impl Transform2d {
 
     /// Creates a new identity [`Transform2d`], with no translation, rotation, and a scale of 1 on all axes.
     ///
-    /// Translation will be `Vec2::ZERO`, rotation will be `0.` and scale will be `Vec2::ONE`
-    #[inline]
-    pub const fn identity() -> Self {
-        Transform2d {
-            translation: Vec2::ZERO,
-            rotation: 0.,
-            scale: Vec2::ONE,
-        }
-    }
+    /// Translation is `Vec2::ZERO`, rotation is `0.`, and scale is `Vec2::ONE`
+    pub const IDENTITY: Self = Transform2d {
+        translation: Vec2::ZERO,
+        rotation: 0.,
+        scale: Vec2::ONE,
+    };
 
     /// Creates a new [`Transform2d`] with `translation`.
     ///
@@ -51,7 +48,7 @@ impl Transform2d {
     pub fn from_translation(translation: Vec2) -> Self {
         Transform2d {
             translation,
-            ..Self::identity()
+            ..Self::IDENTITY
         }
     }
 
@@ -62,7 +59,7 @@ impl Transform2d {
     pub fn from_rotation(rotation: f32) -> Self {
         Transform2d {
             rotation,
-            ..Self::identity()
+            ..Self::IDENTITY
         }
     }
 
@@ -73,7 +70,7 @@ impl Transform2d {
     pub fn from_scale(scale: Vec2) -> Self {
         Transform2d {
             scale,
-            ..Self::identity()
+            ..Self::IDENTITY
         }
     }
 

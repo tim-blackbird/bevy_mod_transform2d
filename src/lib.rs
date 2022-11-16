@@ -3,15 +3,12 @@
 use bevy::{prelude::*, transform::TransformSystem};
 
 #[cfg(feature = "bevy_rapier2d")]
-use bevy_rapier2d::{
-    pipeline::CollisionEvent,
-    plugin::{systems::writeback_rigid_bodies, PhysicsStages},
-};
+use bevy_rapier2d::plugin::{systems::writeback_rigid_bodies, PhysicsStages, RapierPhysicsPlugin};
 
-mod bundle;
+pub mod bundle;
 pub mod systems;
-mod transform_2d;
-mod z_offset;
+pub mod transform_2d;
+pub mod z_offset;
 
 #[cfg(feature = "bevy_rapier2d")]
 use systems::sync_from_3d_transform;
@@ -21,7 +18,10 @@ use z_offset::ZOffset;
 
 pub mod prelude {
     pub use crate::{
-        bundle::Transform2dBundle, transform_2d::Transform2d, z_offset::ZOffset, Transform2dPlugin,
+        bundle::{Spatial2dBundle, Transform2dBundle},
+        transform_2d::Transform2d,
+        z_offset::ZOffset,
+        Transform2dPlugin,
     };
 }
 
@@ -47,13 +47,7 @@ impl Plugin for Transform2dPlugin {
 
         #[cfg(feature = "bevy_rapier2d")]
         {
-            // Check if the RapierPhysicsPlugin plugin was added by confirming the Events::<CollisionEvent> resource exists.
-            // Checking for Events::<CollisionEvent> because it is unlikely a user of bevy_rapier would insert that themselves.
-            if app
-                .world
-                .get_resource::<bevy::ecs::event::Events<CollisionEvent>>()
-                .is_none()
-            {
+            if app.is_plugin_added::<RapierPhysicsPlugin>() {
                 warn!("'bevy_rapier2d' feature enabled, but no compatible version of RapierPhysicsPlugin was not found. Make sure to add the RapierPhysicsPlugin before the Transform2dPlugin.");
             }
             app.add_system_to_stage(

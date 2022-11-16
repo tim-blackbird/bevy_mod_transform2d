@@ -25,14 +25,22 @@ fn setup(mut commands: Commands) {
     commands.spawn((
         SpriteBundle {
             sprite: Sprite {
-                custom_size: Some(Vec2::splat(100.)),
+                custom_size: Some(Vec2::splat(50.)),
                 ..default()
             },
             ..default()
         },
-        // Add a Transform2d component!
+        // Add a Transform2d component
         Transform2d::from_xy(200., 0.),
     ));
+}
+
+// Make the sprite orbit the center using the 2d transform.
+fn orbit(mut query: Query<&mut Transform2d>, time: Res<Time>) {
+    for mut transform in &mut query {
+        // No quaternions in sight!
+        transform.rotate_around(Vec2::ZERO, 1.5 * time.delta_seconds());
+    }
 }
 ```
 

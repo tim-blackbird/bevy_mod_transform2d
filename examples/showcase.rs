@@ -24,7 +24,7 @@ struct Rotate {
 }
 
 fn setup(mut commands: Commands) {
-    // Spawn a sprite with a 2d transform at the center.
+    // Spawn a sprite at the center with a 2d transform.
     commands.spawn((
         SpriteBundle {
             sprite: Sprite {
@@ -38,7 +38,7 @@ fn setup(mut commands: Commands) {
         Rotate { speed: 1. },
     ));
 
-    // Spawn a sprite with a 2d transform that orbits the center.
+    // Spawn a sprite that orbits the center with a 2d transform.
     commands.spawn((
         SpriteBundle {
             sprite: Sprite {
@@ -60,14 +60,14 @@ fn setup(mut commands: Commands) {
     commands.spawn(Camera2dBundle::default());
 }
 
-fn orbit(time: Res<Time>, mut query: Query<(&Orbit, &mut Transform2d)>) {
-    for (orbit, mut transform) in &mut query {
+fn orbit(mut query: Query<(&mut Transform2d, &Orbit)>, time: Res<Time>) {
+    for (mut transform, orbit) in &mut query {
         transform.translate_around(orbit.point, orbit.speed * time.delta_seconds());
     }
 }
 
-fn rotate(time: Res<Time>, mut query: Query<(&Rotate, &mut Transform2d)>) {
-    for (rotate, mut transform) in &mut query {
+fn rotate(mut query: Query<(&mut Transform2d, &Rotate)>, time: Res<Time>) {
+    for (mut transform, rotate) in &mut query {
         transform.rotation += rotate.speed * time.delta_seconds();
     }
 }

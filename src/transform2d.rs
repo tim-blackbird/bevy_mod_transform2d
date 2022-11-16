@@ -1,11 +1,11 @@
-use bevy::{math::Mat2, prelude::*, reflect::FromReflect};
+use bevy::prelude::*;
 
 /// Describes the position of an [`Entity`] in 2d space.
 ///
 /// This component acts as a proxy to the [`Transform`] component,
 /// and thus *requires* that both a [`Transform`] and [`GlobalTransform`] are present to function.
 ///
-/// If this [`Transform2d`] has a parent, then it's relative to the [`Transform2d`] or [`Transform`] of the parent.
+/// If this [`Transform2d`] has a [`Parent`], then it's relative to the [`Transform2d`] or [`Transform`] of the [`Parent`].
 #[derive(Component, Debug, PartialEq, Clone, Copy, Reflect, FromReflect)]
 #[reflect(Component, PartialEq, Default)]
 pub struct Transform2d {
@@ -15,6 +15,15 @@ pub struct Transform2d {
     pub rotation: f32,
     /// The scale along the `X` and `Y` axes.
     pub scale: Vec2,
+    /// The translation along the `Z` axis.
+    ///
+    /// You might be surprised that 2D entities have a translation along the Z axis,
+    /// but this third dimension is used when rendering to decide what should appear in front or behind.
+    /// A higher translation on the Z axis puts the entity closer to the camera, and thus in front of entities with a lower Z translation.
+    /// 
+    /// Keep in mind that this is relative to the [`Parent`]'s `z_translation`.
+    /// Because the other fields on [`Transform2d`] are strictly 2D they don't affect this.
+    pub z_translation: f32,
 }
 
 impl Default for Transform2d {
@@ -39,6 +48,7 @@ impl Transform2d {
         translation: Vec2::ZERO,
         rotation: 0.,
         scale: Vec2::ONE,
+        z_translation: 0.,
     };
 
     /// Creates a new [`Transform2d`] with `translation`.
@@ -95,6 +105,14 @@ impl Transform2d {
     #[inline]
     pub fn with_scale(mut self, scale: Vec2) -> Self {
         self.scale = scale;
+        self
+    }
+
+    /// Returns this [`Transform2d`] with a new Z translation.
+    #[must_use]
+    #[inline]
+    pub fn with_z_translation(mut self, z_translation: f32) -> Self {
+        self.z_translation = z_translation;
         self
     }
 
@@ -155,5 +173,27 @@ impl Transform2d {
     pub fn rotate_around(&mut self, point: Vec2, angle: f32) {
         self.translate_around(point, angle);
         self.rotation += angle;
+    }
+}
+
+impl From<Transform2d> for Transform {
+    #[inline]
+    fn from(transform2d: Transform2d) -> Self {
+        Transform {
+            translation: transform2d.translation.extend(transform2d.z_translation),
+            rotation: Quat::from_rotation_z(transform2d.rotation),
+            scale: transform2d.scale.extend(1.),
+        }
+    }
+}
+
+impl From<Transform> for Transform2d {
+    fn from(transform_3d: Transform) -> Self {
+        Transform2d {
+            translation: transform_3d.translation.truncate(),
+            rotation: transform_3d.rotation.to_euler(EulerRot::ZYX).0,
+            scale: transform_3d.scale.truncate(),
+            z_translation: transform_3d.translation.z,
+        }
     }
 }

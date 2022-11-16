@@ -1,11 +1,10 @@
 use bevy::prelude::*;
 
-use crate::{transform_2d::Transform2d, z_offset::ZOffset};
+use crate::{transform2d::Transform2d};
 
 #[derive(Bundle, Clone, Copy, Debug, Default, Reflect, FromReflect)]
 pub struct Transform2dBundle {
     pub transform: Transform2d,
-    pub z_offset: ZOffset,
     pub transform_3d: Transform,
     pub global_transform: GlobalTransform,
 }
@@ -14,7 +13,6 @@ impl Transform2dBundle {
     /// Creates a new identity [`TransformBundle`], with no translation, rotation, and a scale of 1 on all axes.
     pub const IDENTITY: Self = Transform2dBundle {
         transform: Transform2d::IDENTITY,
-        z_offset: ZOffset(0.),
         transform_3d: Transform::IDENTITY,
         global_transform: GlobalTransform::IDENTITY,
     };
@@ -25,12 +23,6 @@ impl Transform2dBundle {
             transform,
             ..Transform2dBundle::IDENTITY
         }
-    }
-
-    /// Returns this [`Transform2dBundle`] with a new Z offset.
-    pub const fn with_z_offset(mut self, z_offset: ZOffset) -> Self {
-        self.z_offset = z_offset;
-        self
     }
 }
 
@@ -59,9 +51,9 @@ pub struct Spatial2dBundle {
 }
 
 impl Spatial2dBundle {
-    /// Creates a new [`SpatialBundle`] from a [`Transform`].
+    /// Creates a new [`Spatial2dBundle`] from a [`Transform2d`].
     ///
-    /// This initializes [`GlobalTransform`] as identity, and visibility as visible
+    /// This initializes [`GlobalTransform`] as identity, and visibility as visible.
     #[inline]
     pub const fn from_transform(transform: Transform2d) -> Self {
         Spatial2dBundle {

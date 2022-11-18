@@ -45,7 +45,7 @@ fn setup(mut commands: Commands) {
     ));
 }
 
-// Make the sprite orbit the center using the 2d transform.
+// Make the sprite orbit the center
 fn orbit(mut query: Query<&mut Transform2d, With<Sprite>>, time: Res<Time>) {
     for mut transform in &mut query {
         // No quaternions in sight!
@@ -72,11 +72,11 @@ See [bevy_mod_2d_hierarchy] for an alternative plugin that does not require the 
 Note that, for this reason, [bevy_mod_2d_hierarchy] is not compatible with crates that interact with `Transform` (eg. `bevy_rapier2d`),
 and does not support parenting 3D transforms to 2D ones (useful for 2.5D games).
 
-## Intergration with other crates
+## Integration with other crates
 
 To integrate with another library that modifies `Transform` the state of `Transform` and `Transform2d` will need to be synchronised at the right times.
 
-An intergration with `bevy_rapier2d` is included and can be enabled as a feature:
+An integration with `bevy_rapier2d` is included and can be enabled as a feature:
 ```toml
 [dependencies]
 bevy_mod_transform2d = { version = "0.3", features = ["bevy_rapier2d"] }
@@ -95,6 +95,8 @@ If there is another plugin that interacts with the transform here's how you woul
 Licensed under either of <a href="LICENSE-APACHE">Apache License, Version
 2.0</a> or <a href="LICENSE-MIT">MIT license</a> at your option.
 </sup>
+
+<br>
 
 <sub>
 Unless you explicitly state otherwise, any contribution intentionally submitted

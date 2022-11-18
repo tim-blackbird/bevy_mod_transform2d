@@ -44,6 +44,7 @@ impl From<Transform2d> for Transform2dBundle {
 /// * For hierarchies to work correctly, you must have all four components.
 ///   * You may use the [`SpatialBundle`] to guarantee this.
 #[derive(Bundle, Debug, Default)]
+#[cfg(feature = "bevy_render")]
 pub struct Spatial2dBundle {
     /// The visibility of the entity.
     pub visibility: Visibility,
@@ -57,6 +58,7 @@ pub struct Spatial2dBundle {
     pub global_transform: GlobalTransform,
 }
 
+#[cfg(feature = "bevy_render")]
 impl Spatial2dBundle {
     /// Creates a new [`Spatial2dBundle`] from a [`Transform2d`].
     ///
@@ -85,6 +87,7 @@ impl Spatial2dBundle {
     };
 }
 
+#[cfg(feature = "bevy_render")]
 impl From<Transform2d> for Spatial2dBundle {
     #[inline]
     fn from(transform: Transform2d) -> Self {

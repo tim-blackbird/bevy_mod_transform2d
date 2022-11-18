@@ -11,11 +11,9 @@ use transform2d::Transform2d;
 use crate::systems::sync_transform_2d_to_3d;
 
 pub mod prelude {
-    pub use crate::{
-        bundle::{Spatial2dBundle, Transform2dBundle},
-        transform2d::Transform2d,
-        Transform2dPlugin,
-    };
+    #[cfg(feature = "bevy_render")]
+    pub use crate::bundle::Spatial2dBundle;
+    pub use crate::{bundle::Transform2dBundle, transform2d::Transform2d, Transform2dPlugin};
 }
 
 /// The [`Plugin`] for [`Transform2d`].

@@ -9,6 +9,10 @@ license = "MIT OR Apache-2.0"
 keywords = ["bevy", "gamedev"]
 categories = ["game-development"]
 
+[features]
+default = ["bevy_render"]
+bevy_render = ["bevy/bevy_render"]
+
 [dependencies]
 bevy = { version = "0.9", default-features = false }
 bevy_rapier2d = { version = "0.19", default-features = false, optional = true }

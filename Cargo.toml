@@ -18,10 +18,6 @@ bevy = { version = "0.9", default-features = false }
 bevy_rapier2d = { version = "0.19", default-features = false, optional = true }
 
 [[example]]
-name = "meteors"
-required-features = ["bevy_rapier2d"]
-
-[[example]]
 name = "rapier2d"
 required-features = ["bevy_rapier2d"]
 

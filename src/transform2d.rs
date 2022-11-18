@@ -20,9 +20,9 @@ pub struct Transform2d {
     /// You might be surprised that 2D entities have a translation along the Z axis,
     /// but this third dimension is used when rendering to decide what should appear in front or behind.
     /// A higher translation on the Z axis puts the entity closer to the camera, and thus in front of entities with a lower Z translation.
-    /// 
+    ///
     /// Keep in mind that this is relative to the [`Parent`]'s `z_translation`.
-    /// Because the other fields on [`Transform2d`] are strictly 2D they don't affect this.
+    /// The other fields on [`Transform2d`] don't affect this because they are strictly 2D.
     pub z_translation: f32,
 }
 
@@ -77,9 +77,9 @@ impl Transform2d {
     ///
     /// Translation will be `Vec2::ZERO` and rotation will be `0.` .
     #[inline]
-    pub fn from_scale(scale: Vec2) -> Self {
+    pub fn from_scale(scale: impl IntoScale) -> Self {
         Transform2d {
-            scale,
+            scale: scale.into_scale(),
             ..Self::IDENTITY
         }
     }
@@ -103,8 +103,8 @@ impl Transform2d {
     /// Returns this [`Transform2d`] with a new scale.
     #[must_use]
     #[inline]
-    pub fn with_scale(mut self, scale: Vec2) -> Self {
-        self.scale = scale;
+    pub fn with_scale(mut self, scale: impl IntoScale) -> Self {
+        self.scale = scale.into_scale();
         self
     }
 
@@ -195,5 +195,21 @@ impl From<Transform> for Transform2d {
             scale: transform_3d.scale.truncate(),
             z_translation: transform_3d.translation.z,
         }
+    }
+}
+
+pub trait IntoScale {
+    fn into_scale(self) -> Vec2;
+}
+
+impl IntoScale for Vec2 {
+    fn into_scale(self) -> Vec2 {
+        self
+    }
+}
+
+impl IntoScale for f32 {
+    fn into_scale(self) -> Vec2 {
+        Vec2::splat(self)
     }
 }

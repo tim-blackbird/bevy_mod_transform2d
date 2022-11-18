@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{transform2d::Transform2d};
+use crate::transform2d::Transform2d;
 
 #[derive(Bundle, Clone, Copy, Debug, Default, Reflect, FromReflect)]
 pub struct Transform2dBundle {
@@ -23,6 +23,13 @@ impl Transform2dBundle {
             transform,
             ..Transform2dBundle::IDENTITY
         }
+    }
+}
+
+impl From<Transform2d> for Transform2dBundle {
+    #[inline]
+    fn from(transform: Transform2d) -> Self {
+        Transform2dBundle::from_transform(transform)
     }
 }
 
@@ -81,6 +88,6 @@ impl Spatial2dBundle {
 impl From<Transform2d> for Spatial2dBundle {
     #[inline]
     fn from(transform: Transform2d) -> Self {
-        Self::from_transform(transform)
+        Spatial2dBundle::from_transform(transform)
     }
 }

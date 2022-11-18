@@ -8,7 +8,7 @@ pub mod transform2d;
 
 use transform2d::Transform2d;
 
-use crate::systems::sync_2d_to_3d_transform;
+use crate::systems::sync_transform_2d_to_3d;
 
 pub mod prelude {
     pub use crate::{
@@ -30,31 +30,39 @@ impl Plugin for Transform2dPlugin {
             // Add transform2d sync system to startup so the first update is "correct"
             .add_startup_system_to_stage(
                 StartupStage::PostStartup,
-                sync_2d_to_3d_transform.before(TransformSystem::TransformPropagate),
+                sync_transform_2d_to_3d.before(TransformSystem::TransformPropagate),
             )
             .add_system_to_stage(
                 CoreStage::PostUpdate,
-                sync_2d_to_3d_transform.before(TransformSystem::TransformPropagate),
+                sync_transform_2d_to_3d.before(TransformSystem::TransformPropagate),
             );
 
         #[cfg(feature = "bevy_rapier2d")]
         {
-            use bevy_rapier2d::plugin::{
-                systems::writeback_rigid_bodies, PhysicsStages, RapierPhysicsPlugin,
+            use bevy_rapier2d::{
+                pipeline::CollisionEvent,
+                plugin::{systems::writeback_rigid_bodies, PhysicsStages},
             };
-            use systems::sync_3d_to_2d_transform;
+            use systems::sync_transform_3d_to_2d;
 
-            if app.is_plugin_added::<RapierPhysicsPlugin>() {
-                warn!("'bevy_rapier2d' feature enabled, but no compatible version of RapierPhysicsPlugin was not found. Make sure to add the RapierPhysicsPlugin before the Transform2dPlugin.");
+            if app
+                .world
+                .get_resource::<bevy::ecs::event::Events<CollisionEvent>>()
+                .is_none()
+            {
+                panic!(
+                    "The 'bevy_rapier2d' feature is enabled, but no compatible version of RapierPhysicsPlugin was not found. \
+                    Make sure to add the Transform2dPlugin after the RapierPhysicsPlugin."
+                );
             }
 
             app.add_system_to_stage(
                 PhysicsStages::SyncBackend,
-                sync_2d_to_3d_transform.before(bevy::transform::transform_propagate_system),
+                sync_transform_2d_to_3d.before(bevy::transform::transform_propagate_system),
             )
             .add_system_to_stage(
                 PhysicsStages::Writeback,
-                sync_3d_to_2d_transform.after(writeback_rigid_bodies),
+                sync_transform_3d_to_2d.after(writeback_rigid_bodies),
             );
         }
     }

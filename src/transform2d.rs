@@ -218,9 +218,19 @@ impl IntoScale for f32 {
     }
 }
 
-#[test]
-fn test() {
-    let transform = Transform2d::from_rotation(-TAU / 2.44);
-    assert_eq!(transform.local_y(), transform.rotation_matrix() * Vec2::Y);
-    assert_eq!(transform.local_x(), transform.rotation_matrix() * Vec2::X);
+#[cfg(test)]
+mod tests {
+    use std::f32::consts::TAU;
+
+    use super::*;
+
+    #[test]
+    fn local_vectors() {
+        let mut transform = Transform2d::from_rotation(TAU / 2.44);
+        assert_eq!(transform.local_y(), transform.rotation_matrix() * Vec2::Y);
+        assert_eq!(transform.local_x(), transform.rotation_matrix() * Vec2::X);
+        transform.rotation = TAU / -0.56;
+        assert_eq!(transform.local_y(), transform.rotation_matrix() * Vec2::Y);
+        assert_eq!(transform.local_x(), transform.rotation_matrix() * Vec2::X);
+    }
 }

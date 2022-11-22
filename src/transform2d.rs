@@ -1,6 +1,4 @@
-use std::f32::consts::TAU;
-
-use bevy::prelude::*;
+use bevy::{math::Affine2, prelude::*};
 
 /// Describes the position of an [`Entity`] in 2d space.
 ///
@@ -160,6 +158,18 @@ impl Transform2d {
     #[inline]
     pub fn rotation_matrix(&self) -> Mat2 {
         Mat2::from_angle(self.rotation)
+    }
+
+    /// Computes the affine transformation matrix of this transform.
+    #[inline]
+    pub fn matrix(&self) -> Mat3 {
+        Mat3::from_scale_angle_translation(self.scale, self.rotation, self.translation)
+    }
+
+    /// Computes the affine transform of this transform.
+    #[inline]
+    pub fn affine(&self) -> Affine2 {
+        Affine2::from_scale_angle_translation(self.scale, self.rotation, self.translation)
     }
 
     /// Translates this [`Transform2d`] around a `point` in space.

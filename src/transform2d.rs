@@ -1,3 +1,5 @@
+use std::f32::consts::TAU;
+
 use bevy::prelude::*;
 
 /// Describes the position of an [`Entity`] in 2d space.
@@ -119,7 +121,8 @@ impl Transform2d {
     /// Get the unit vector in the local `X` direction.
     #[inline]
     pub fn local_x(&self) -> Vec2 {
-        self.rotation_matrix() * Vec2::X
+        let (sin, cos) = self.rotation.sin_cos();
+        (cos, sin).into()
     }
 
     #[inline]
@@ -137,7 +140,8 @@ impl Transform2d {
     /// Get the unit vector in the local `Y` direction.
     #[inline]
     pub fn local_y(&self) -> Vec2 {
-        self.rotation_matrix() * Vec2::Y
+        let (sin, cos) = self.rotation.sin_cos();
+        (-sin, cos).into()
     }
 
     /// Equivalent to [`local_y()`][Self::local_y]
@@ -212,4 +216,11 @@ impl IntoScale for f32 {
     fn into_scale(self) -> Vec2 {
         Vec2::splat(self)
     }
+}
+
+#[test]
+fn test() {
+    let transform = Transform2d::from_rotation(-TAU / 2.44);
+    assert_eq!(transform.local_y(), transform.rotation_matrix() * Vec2::Y);
+    assert_eq!(transform.local_x(), transform.rotation_matrix() * Vec2::X);
 }

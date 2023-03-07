@@ -10,7 +10,7 @@ Add the dependency to your `Cargo.toml`
 
 ```toml
 [dependencies]
-bevy_mod_transform2d = "0.3"
+bevy_mod_transform2d = "0.4"
 ```
 
 Example:
@@ -60,6 +60,7 @@ Take a look at the other [examples](examples).
 
 |Bevy  |transform2d
 |-     |-
+| 0.10 |0.4
 | 0.9  |0.3
 | 0.8  |0.2
 | 0.7  |0.1
@@ -79,7 +80,7 @@ To integrate with another library that modifies `Transform` the state of `Transf
 An integration with `bevy_rapier2d` is included and can be enabled as a feature:
 ```toml
 [dependencies]
-bevy_mod_transform2d = { version = "0.3", features = ["bevy_rapier2d"] }
+bevy_mod_transform2d = { version = "0.4", features = ["bevy_rapier2d"] }
 ```
 
 If there is another plugin that interacts with the transform here's how you would synchronise the state to make `Transform2d` compatible with that plugin.

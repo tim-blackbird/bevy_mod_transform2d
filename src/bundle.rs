@@ -67,23 +67,23 @@ impl Spatial2dBundle {
     pub const fn from_transform(transform: Transform2d) -> Self {
         Spatial2dBundle {
             transform,
-            ..Self::VISIBLE_IDENTITY
+            ..Self::INHERITED_IDENTITY
         }
     }
 
     /// A visible [`Spatial2dBundle`], with no translation, rotation, and a scale of 1 on all axes.
-    pub const VISIBLE_IDENTITY: Self = Spatial2dBundle {
-        visibility: Visibility::VISIBLE,
-        computed: ComputedVisibility::INVISIBLE,
+    pub const INHERITED_IDENTITY: Self = Spatial2dBundle {
+        visibility: Visibility::Inherited,
+        computed: ComputedVisibility::HIDDEN,
         transform: Transform2d::IDENTITY,
         transform_3d: Transform::IDENTITY,
         global_transform: GlobalTransform::IDENTITY,
     };
 
     /// An invisible [`Spatial2dBundle`], with no translation, rotation, and a scale of 1 on all axes.
-    pub const INVISIBLE_IDENTITY: Self = Spatial2dBundle {
-        visibility: Visibility::INVISIBLE,
-        ..Self::VISIBLE_IDENTITY
+    pub const HIDDEN_IDENTITY: Self = Spatial2dBundle {
+        visibility: Visibility::Inherited,
+        ..Self::INHERITED_IDENTITY
     };
 }
 

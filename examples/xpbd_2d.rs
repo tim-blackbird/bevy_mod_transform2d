@@ -1,14 +1,15 @@
 use bevy::prelude::*;
 use bevy_mod_transform2d::prelude::*;
-use bevy_rapier2d::prelude::*;
+use bevy_xpbd_2d::{math::*, prelude::*};
 
 fn main() {
     App::new()
+        .insert_resource(Gravity(Vector::NEG_Y * 1000.))
         .add_plugins((
             DefaultPlugins,
             Transform2dPlugin,
-            RapierPhysicsPlugin::<NoUserData>::default().with_physics_scale(100.),
-            RapierDebugRenderPlugin::default(),
+            PhysicsPlugins::default(),
+            PhysicsDebugPlugin::default(),
         ))
         .add_systems(Startup, setup)
         .add_systems(Update, rotate_platform)
@@ -29,17 +30,17 @@ fn setup(mut commands: Commands) {
     commands.spawn((
         Platform,
         Transform2dBundle::from(Transform2d::from_xy(0., -320.)),
-        RigidBody::KinematicPositionBased,
-        Collider::cuboid(400., 20.),
+        RigidBody::Kinematic,
+        Collider::cuboid(800., 40.),
     ));
 
     // Boxes
     for x in -3..4 {
         for y in -2..4 {
             commands.spawn((
-                Transform2dBundle::from(Transform2d::from_xy(x as f32 * 100., y as f32 * 100.)),
+                Transform2dBundle::from(Transform2d::from_xy(x as f32 * 101., y as f32 * 101.)),
                 RigidBody::Dynamic,
-                Collider::cuboid(50., 50.),
+                Collider::cuboid(100., 100.),
             ));
         }
     }

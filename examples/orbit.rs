@@ -4,12 +4,22 @@ use bevy_mod_transform2d::prelude::*;
 fn main() {
     App::new()
         .insert_resource(ClearColor(Color::BLACK))
-        .add_plugins(DefaultPlugins)
-        .add_plugin(Transform2dPlugin)
-        .add_startup_system(setup)
-        .add_system(orbit)
-        .add_system(rotate)
+        .add_plugins((DefaultPlugins, Transform2dPlugin))
+        .add_systems(Startup, setup)
+        .add_systems(Update, (orbit, rotate))
         .run();
+}
+
+fn orbit(mut query: Query<(&mut Transform2d, &Orbit)>, time: Res<Time>) {
+    for (mut transform, orbit) in &mut query {
+        transform.translate_around(orbit.point, orbit.speed * time.delta_seconds());
+    }
+}
+
+fn rotate(mut query: Query<(&mut Transform2d, &Rotate)>, time: Res<Time>) {
+    for (mut transform, rotate) in &mut query {
+        transform.rotation += rotate.speed * time.delta_seconds();
+    }
 }
 
 #[derive(Component)]
@@ -58,16 +68,4 @@ fn setup(mut commands: Commands) {
 
     // Spawn the camera.
     commands.spawn(Camera2dBundle::default());
-}
-
-fn orbit(mut query: Query<(&mut Transform2d, &Orbit)>, time: Res<Time>) {
-    for (mut transform, orbit) in &mut query {
-        transform.translate_around(orbit.point, orbit.speed * time.delta_seconds());
-    }
-}
-
-fn rotate(mut query: Query<(&mut Transform2d, &Rotate)>, time: Res<Time>) {
-    for (mut transform, rotate) in &mut query {
-        transform.rotation += rotate.speed * time.delta_seconds();
-    }
 }

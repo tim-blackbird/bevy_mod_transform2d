@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::transform2d::Transform2d;
 
-#[derive(Bundle, Clone, Copy, Debug, Default, Reflect, FromReflect)]
+#[derive(Bundle, Clone, Copy, Debug, Default, Reflect)]
 pub struct Transform2dBundle {
     pub transform: Transform2d,
     pub transform_3d: Transform,

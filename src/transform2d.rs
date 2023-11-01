@@ -6,7 +6,7 @@ use bevy::{math::Affine2, prelude::*};
 /// and thus *requires* that both a [`Transform`] and [`GlobalTransform`] are present to function.
 ///
 /// If this [`Transform2d`] has a [`Parent`], then it's relative to the [`Transform2d`] or [`Transform`] of the [`Parent`].
-#[derive(Component, Debug, PartialEq, Clone, Copy, Reflect, FromReflect)]
+#[derive(Component, Debug, PartialEq, Clone, Copy, Reflect)]
 #[reflect(Component, PartialEq, Default)]
 pub struct Transform2d {
     /// The translation along the `X` and `Y` axes.

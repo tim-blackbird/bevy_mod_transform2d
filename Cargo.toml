@@ -1,7 +1,7 @@
 [package]
 name = "bevy_mod_transform2d"
 description = "A 2D Transform component for The Bevy game-engine."
-version = "0.4.1"
+version = "0.5.0"
 edition = "2021"
 
 repository = "http://github.com/devil-ira/bevy_mod_transform2d"
@@ -13,14 +13,25 @@ categories = ["game-development"]
 default = ["bevy_render"]
 bevy_render = ["bevy/bevy_render"]
 
+
+[profile.dev]
+opt-level = 1
+
+
 [dependencies]
-bevy = { version = "0.10", default-features = false }
-bevy_rapier2d = { version = "0.21", default-features = false, optional = true }
+bevy = { version = "0.11", default-features = false }
+bevy_rapier2d = { version = "0.22", default-features = false, optional = true }
+bevy_xpbd_2d = { version = "0.2", default-features = false, optional = true }
+
+[dev-dependencies]
+bevy = "0.11"
+bevy_rapier2d = { version = "0.22" }
+bevy_xpbd_2d = { version = "0.2" }
 
 [[example]]
 name = "rapier2d"
 required-features = ["bevy_rapier2d"]
 
-[dev-dependencies]
-bevy = "0.10"
-bevy_rapier2d = { version = "0.21.0" }
+[[example]]
+name = "xpbd_2d"
+required-features = ["bevy_xpbd_2d"]

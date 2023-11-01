@@ -4,7 +4,7 @@ description = "A 2D Transform component for The Bevy game-engine."
 version = "0.5.0"
 edition = "2021"
 
-repository = "http://github.com/devil-ira/bevy_mod_transform2d"
+repository = "https://github.com/devil-ira/bevy_mod_transform2d"
 license = "MIT OR Apache-2.0"
 keywords = ["bevy", "gamedev"]
 categories = ["game-development"]

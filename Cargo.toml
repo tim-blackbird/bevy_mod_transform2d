@@ -35,3 +35,6 @@ required-features = ["bevy_rapier2d"]
 [[example]]
 name = "xpbd_2d"
 required-features = ["bevy_xpbd_2d"]
+
+[patch.crates-io]
+bevy_xpbd_2d = { git = "https://github.com/Jondolf/bevy_xpbd" }

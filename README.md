@@ -6,11 +6,13 @@ A 2D Transform component for [Bevy](https://github.com/bevyengine/bevy).
 
 ## Usage
 
-Add the dependency to your `Cargo.toml`
+Run `cargo add bevy_mod_transform2d`.
+
+Or add the dependency to your `Cargo.toml`
 
 ```toml
 [dependencies]
-bevy_mod_transform2d = "0.4"
+bevy_mod_transform2d = "0.5"
 ```
 
 Example:
@@ -21,11 +23,13 @@ use bevy_mod_transform2d::prelude::*;
 
 fn main() {
     App::new()
-        .add_plugins(DefaultPlugins)
-        // Add the Transform2dPlugin
-        .add_plugin(Transform2dPlugin)
-        .add_startup_system(setup)
-        .add_system(orbit)
+        .add_plugins((
+            DefaultPlugins,
+            // Add the Transform2dPlugin
+            Transform2dPlugin,
+        ))
+        .add_systems(Startup, setup)
+        .add_systems(Update, orbit)
         .run();
 }
 
@@ -60,6 +64,7 @@ Take a look at the other [examples](examples).
 
 |Bevy  |transform2d
 |-     |-
+| 0.11 |0.5
 | 0.10 |0.4
 | 0.9  |0.3
 | 0.8  |0.2
@@ -69,18 +74,19 @@ Take a look at the other [examples](examples).
 
 Note that the `Transform2d` component does not replace `Transform` component, instead it writes to it. The `Transform` and `GlobalTransform` components are required for `Transform2d` to function.
 
-See [bevy_mod_2d_hierarchy] for an alternative plugin that does not require the `Transform` component.
-Note that, for this reason, [bevy_mod_2d_hierarchy] is not compatible with crates that interact with `Transform` (eg. `bevy_rapier2d`),
-and does not support parenting 3D transforms to 2D ones (useful for 2.5D games).
+This makes this crate compatible with crates that interact with `Transform` (eg. `bevy_rapier2d` and `bevy_xpbd_2d`) at the cost of performance,
+and it supports parenting 3D transforms to 2D transforms and vice versa.
 
 ## Integration with other crates
 
-To integrate with another library that modifies `Transform` the state of `Transform` and `Transform2d` will need to be synchronised at the right times.
+To integrate with another library that modifies `Transform` the state of `Transform` and `Transform2d` will need to be synchronised back and forth at the right times.
 
-An integration with `bevy_rapier2d` is included and can be enabled as a feature:
+Integrations with `bevy_rapier2d` and `bevy_xpbd_2d` are included and can be enabled as a feature:
 ```toml
 [dependencies]
-bevy_mod_transform2d = { version = "0.4", features = ["bevy_rapier2d"] }
+bevy_mod_transform2d = { version = "...", features = ["bevy_rapier2d"] }
+# or
+bevy_mod_transform2d = { version = "...", features = ["bevy_xpbd_2d"] }
 ```
 
 If there is another plugin that interacts with the transform here's how you would synchronise the state to make `Transform2d` compatible with that plugin.
@@ -104,5 +110,3 @@ Unless you explicitly state otherwise, any contribution intentionally submitted
 for inclusion in this crate by you, as defined in the Apache-2.0 license, shall
 be dual licensed as above, without any additional terms or conditions.
 </sub>
-
-[bevy_mod_2d_hierarchy]: https://github.com/ickshonpe/bevy_mod_2d_hierarchy

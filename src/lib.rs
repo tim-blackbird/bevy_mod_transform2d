@@ -20,17 +20,25 @@ pub mod prelude {
 #[derive(Default)]
 pub struct Transform2dPlugin;
 
+/// A superset of the [`TransformSystem::TransformPropagate`] [`SystemSet`] that includes the systems that synchronise the [`Transform2d`] component.
+#[derive(SystemSet, Debug, Hash, PartialEq, Eq, Clone)]
+pub struct Transform2dPropagate;
+
 impl Plugin for Transform2dPlugin {
     fn build(&self, app: &mut App) {
         app.register_type::<Transform2d>()
             // Add transform2d sync system to startup so the first update is "correct"
             .add_systems(
                 PostStartup,
-                systems::sync_transform_2d_to_3d.before(TransformSystem::TransformPropagate),
+                systems::sync_transform_2d_to_3d
+                    .before(TransformSystem::TransformPropagate)
+                    .in_set(Transform2dPropagate),
             )
             .add_systems(
                 PostUpdate,
-                systems::sync_transform_2d_to_3d.before(TransformSystem::TransformPropagate),
+                systems::sync_transform_2d_to_3d
+                    .before(TransformSystem::TransformPropagate)
+                    .in_set(Transform2dPropagate),
             );
 
         #[cfg(feature = "bevy_rapier2d")]

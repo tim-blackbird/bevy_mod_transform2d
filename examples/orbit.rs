@@ -3,7 +3,6 @@ use bevy_mod_transform2d::prelude::*;
 
 fn main() {
     App::new()
-        .insert_resource(ClearColor(Color::BLACK))
         .add_plugins((DefaultPlugins, Transform2dPlugin))
         .add_systems(Startup, setup)
         .add_systems(Update, (orbit, rotate))

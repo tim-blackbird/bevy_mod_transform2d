@@ -38,9 +38,9 @@ fn setup(mut commands: Commands) {
     for x in -3..4 {
         for y in -2..4 {
             commands.spawn((
-                Transform2dBundle::from(Transform2d::from_xy(x as f32 * 101., y as f32 * 101.)),
+                Transform2dBundle::from(Transform2d::from_xy(x as f32 * 100., y as f32 * 100.)),
                 RigidBody::Dynamic,
-                Collider::cuboid(100., 100.),
+                Collider::cuboid(99., 99.),
             ));
         }
     }

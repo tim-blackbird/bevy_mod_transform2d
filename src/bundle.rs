@@ -48,8 +48,10 @@ impl From<Transform2d> for Transform2dBundle {
 pub struct Spatial2dBundle {
     /// The visibility of the entity.
     pub visibility: Visibility,
-    /// The computed visibility of the entity.
-    pub computed: ComputedVisibility,
+    /// The inherited visibility of the entity.
+    pub inherited_visibility: InheritedVisibility,
+    /// The view visibility of the entity.
+    pub view_visibility: ViewVisibility,
     /// The transform of the entity.
     pub transform: Transform2d,
     /// The 3D transform of the entity.
@@ -74,7 +76,8 @@ impl Spatial2dBundle {
     /// A visible [`Spatial2dBundle`], with no translation, rotation, and a scale of 1 on all axes.
     pub const INHERITED_IDENTITY: Self = Spatial2dBundle {
         visibility: Visibility::Inherited,
-        computed: ComputedVisibility::HIDDEN,
+        inherited_visibility: InheritedVisibility::HIDDEN,
+        view_visibility: ViewVisibility::HIDDEN,
         transform: Transform2d::IDENTITY,
         transform_3d: Transform::IDENTITY,
         global_transform: GlobalTransform::IDENTITY,

@@ -19,22 +19,20 @@ opt-level = 1
 
 
 [dependencies]
-bevy = { version = "0.11", default-features = false }
+bevy = { version = "0.12", default-features = false }
 bevy_rapier2d = { version = "0.22", default-features = false, optional = true }
-bevy_xpbd_2d = { version = "0.2", default-features = false, optional = true }
+bevy_xpbd_2d = { version = "0.3", default-features = false, optional = true }
 
 [dev-dependencies]
-bevy = "0.11"
-bevy_rapier2d = { version = "0.22" }
-bevy_xpbd_2d = { version = "0.2" }
+bevy = "0.12"
+bevy_rapier2d = { version = "0.23" }
+bevy_xpbd_2d = { version = "0.3" }
 
 [[example]]
-name = "rapier2d"
+name = "rapier"
 required-features = ["bevy_rapier2d"]
 
 [[example]]
-name = "xpbd_2d"
+name = "xpbd"
 required-features = ["bevy_xpbd_2d"]
 
-[patch.crates-io]
-bevy_xpbd_2d = { git = "https://github.com/Jondolf/bevy_xpbd" }

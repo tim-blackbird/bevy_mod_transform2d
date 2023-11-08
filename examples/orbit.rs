@@ -34,7 +34,7 @@ struct Rotate {
 }
 
 fn setup(mut commands: Commands) {
-    // Spawn a sprite at the center with a 2d transform.
+    // Spawn a sprite in the center with a 2d transform.
     commands.spawn((
         SpriteBundle {
             sprite: Sprite {
